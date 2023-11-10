@@ -12,6 +12,7 @@ library("dplyr")
 df <- SPRING %>% 
   select(c(record_id:redcap_event_name, psqi_bedtime:psqi_enthusiasm, steps_day:sed_min, wear_min:weardays, cr_prepregwt_kgs, gawks_v1:af_gadays_v3, livebirths, meds, randomization, af_height_feet:af_height_inches))
 
+save(df, file = 'df.RData', envir = globalenv())
 
 
 
