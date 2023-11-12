@@ -1,5 +1,7 @@
-#Subjective sleep quality: Question 6 - psqi_quality; assign component score
+load(file = "df.RData")
 
+#Subjective sleep quality: Question 6 - psqi_quality; assign component score
+df$psqi_quality
 
 #Sleep latency: Questions 2 and 5a - psqi_fallasleep & psqi_30min; assign component subscore
 
