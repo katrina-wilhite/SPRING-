@@ -28,10 +28,11 @@ df$psqi30_scored <- recode(df$psqi30_scored,
 
 
 #Sleep duration: Question 4 - psqi_sleep; assign component score 
+df$sleep_scored <- df$psqi_sleep
 
 
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
-
+##Need to sleep bedtime and getup times first 
 
 #Habitual sleep efficiency: (psqi_sleep/hours spent in bed) X 100 = % 
 
