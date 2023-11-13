@@ -1,10 +1,25 @@
 load(file = "df.RData")
+library(dplyr)
 
 #Subjective sleep quality: Question 6 - psqi_quality; assign component score
-df$psqi_quality
+df$quality_scored <- df$psqi_quality
+df$quality_scored <- recode(df$quality_scored,
+                          "Very Good" = 0,
+                          "Fairly Good" = 1,
+                          "Fairly Bad" = 2,
+                          "Very Bad" = 3)
 
 #Sleep latency: Questions 2 and 5a - psqi_fallasleep & psqi_30min; assign component subscore
+df$fallasleep_scored <- df$psqi_fallasleep
+df$fallasleep_scored <- recode(df$fallasleep_scored)
 
+
+df$psqi30_scored <- df$psqi_30min
+df$psqi30_scored <- recode(df$psqi30_scored,
+                           "Not during the past month" = 0,
+                           "Less than once a week" = 1, 
+                           "Once or twice a week" = 2, 
+                           "Three or more times a week" = 3)
 
 ##Sleep latency; sum question 2 and 5a
 
