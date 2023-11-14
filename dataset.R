@@ -1,4 +1,6 @@
+setwd("C:/Users/katri/Documents/WVU/R Projects/SPRING-/")
 SPRING <- `SPRING data`
+save(SPRING, file="SPRING.Rda")
 View(SPRING[,1:50])
 View(SPRING[,51:100])
 View(SPRING[,101:150])
