@@ -33,7 +33,8 @@ df$latency_scored <- cut(df$latency_scored, breaks = breakpoints_latency2, label
 
 #Sleep duration: Question 4 - psqi_sleep; assign component score 
 df$sleep_scored <- df$psqi_sleep
-
+breakpoints_duration <- c(-Inf, 4.999, 5.999, 6.999, Inf)
+df$sleep_scored <- cut(df$sleep_scored, breaks = breakpoints_duration, labels = c(3,2,1,0), include.lowest = TRUE)
 
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
 ##Need to sleep bedtime and getup times first 
