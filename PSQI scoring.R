@@ -89,13 +89,16 @@ df$getup_clean <- df$getup_clean + days(1)
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
 df <- df %>% 
   mutate(hours_in_bed = (getup_clean - bedtime_clean))
-df$hours_in_bed
+df$hours_in_bed <- as.numeric(round(df$hours_in_bed, digits = 2))
 
 #Habitual sleep efficiency: (psqi_sleep/hours spent in bed) X 100 = % 
-
+df$efficiency <- df$psqi_sleep/df$hours_in_bed * 100
+df$efficiency <- round(df$efficiency, digits = 0)
 
 #Habitual sleep efficiency: assign component score 
-
+df$efficiency_scored <- df$efficiency
+breakpoints_efficiency <- c(-Inf, 65, 75, 85, Inf)
+df$efficiency_scored <- cut(df$efficiency_scored, breaks = breakpoints_efficiency, labels = c(3,2,1,0), include.lowest = TRUE)
 
 #Sleep disturbances: questions 5b-5j - psqi_middle:psqi_other2; assign component subscores for each 
 ##First, move psqi_other as this is optional and a character column 
