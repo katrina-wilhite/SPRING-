@@ -46,18 +46,14 @@ df$psqi_bedtime <- gsub(" ", "", df$psqi_bedtime, ignore.case = TRUE)
 df$psqi_bedtime <- tolower(df$psqi_bedtime)
 df$psqi_bedtime[df$psqi_bedtime == "10:00pmn"] <- "10:00pm"
 #Remove time for 8am because this was likely a typo - getup time was 5am so hard to determine which time was a typo (e.g., potentially a shift worker) 
-df$psqi_bedtime[df$psqi_bedtime == "8:00:00am"] <- ""
+df$psqi_bedtime[df$psqi_bedtime == "8:00am"] <- ""
 df$psqi_bedtime[df$psqi_bedtime == "11:00"] <- "11:00pm"
-df$psqi_bedtime <- sub("(\\d{1,2})(\\d{2})pm?", "\\1:\\2pm", df$psqi_bedtime)
-df$psqi_bedtime <- sub("(\\d{1,2})([ap]m)", "\\1:00\\2", df$psqi_bedtime)
-
-as.numeric(sapply(strptime(df$psqi_bedtime, "%I:%M:%S%p", tz = "UTC"), as.POSIXct))
-hms(df$psqi_bedtime)
-strptime(df$psqi_bedtime, format = formats)
-formats <- c("%H:%M","%H:%M:%S")
+df$psqi_bedtime[df$psqi_bedtime == "10.00pm"] <- "10:00pm"
+formats <- c("%I:%M%p","%I%M%p", "%I%p")
 df$psqi_bedtime <- parse_date_time(df$psqi_bedtime, orders = formats)
 #Add 1 day for people who went to bed at or before midnight 
 after_midnight <- df$psqi_bedtime < "0000-01-01 12:00:00 UTC"
+
 if (df$psqi_bedtime < "0000-01-01 12:00:00 UTC") {
   print(df$psqi_bedtime + days(1))
 } 
