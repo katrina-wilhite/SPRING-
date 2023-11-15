@@ -79,7 +79,7 @@ df$psqi_getup <- df$psqi_getup + days(1)
 
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
 df <- df %>% 
-  mutate(hours_in_bed = difftime(psqi_getup, psqi_bedtime, units = "hours"))
+  mutate(hours_in_bed = round(difftime(psqi_getup, psqi_bedtime, units = "hours"), digits = 2))
 
 
 #Habitual sleep efficiency: (psqi_sleep/hours spent in bed) X 100 = % 
@@ -88,17 +88,31 @@ df <- df %>%
 #Habitual sleep efficiency: assign component score 
 
 
-#Sleep disturbances: questions 5b-5j - psqi_middle:psqi_other; assign component subscores for each 
+#Sleep disturbances: questions 5b-5j - psqi_middle:psqi_other2; assign component subscores for each 
+##First, move psqi_other as this is optional and a character column 
+df <- relocate(df, psqi_other, .after = psqi_other2)
+for (i in 8:16(df)) {
+  df[,i] <- recode(df[,i],
+         "Not during the past month" = 0,
+         "Less than once a week" = 1, 
+         "Once or twice a week" = 2, 
+         "Three or more times a week" = 3)
+}
 
 
-#Sleep disturbances: Sum scores of psqi_middle:psqi_other 
+#Sleep disturbances: Sum scores of psqi_middle:psqi_other2 
 
 
 #Sleep disturbances: assign component score 
 
 
 #Use of sleep medication: Question 7 - psqi_meds; assign component score 
-
+df$psqi_meds_scored <- df$psqi_meds
+df$psqi_meds_scored <- recode(df$psqi_meds_scored,
+                           "Not during the last month" = 0,
+                           "Less than once a week" = 1, 
+                           "Once or twice a week" = 2, 
+                           "Three or more times a week" = 3)
 
 #Daytime dysfunction: Questions 8 and 9; psqi_stayawake & psqi_enthusiasm; assign component subscores for each 
 
