@@ -41,21 +41,30 @@ breakpoints_duration <- c(-Inf, 4.999, 5.999, 6.999, Inf)
 df$sleep_scored <- cut(df$sleep_scored, breaks = breakpoints_duration, labels = c(3,2,1,0), include.lowest = TRUE)
 
 #Habitual sleep efficiency; first clean bedtime and getup times psqi_bedtime & psqi_getup
+##add "pm" to values that don't have it
 df$psqi_bedtime <- sub("(\\d{1,2}:\\d{2}$)", "\\1 PM", df$psqi_bedtime)
+## change 'p' to 'pm'
 df$psqi_bedtime <- sub("p(?!m)", "pm", df$psqi_bedtime, perl = TRUE)
+##change 'p.m.' to 'pm'
 df$psqi_bedtime <- sub("pm\\.m\\.", "pm", df$psqi_bedtime)
+##remove whitespace
 df$psqi_bedtime <- gsub(" ", "", df$psqi_bedtime, ignore.case = TRUE) 
+##make all characters lowercase
 df$psqi_bedtime <- tolower(df$psqi_bedtime)
+##Fix typos
 df$psqi_bedtime[df$psqi_bedtime == "10:00pmn"] <- "10:00pm"
-#Remove time for 8am because this was likely a typo - getup time was 5am so hard to determine which time was a typo (e.g., potentially a shift worker) 
-df$psqi_bedtime[df$psqi_bedtime == "8:00am"] <- ""
 df$psqi_bedtime[df$psqi_bedtime == "11:00"] <- "11:00pm"
 df$psqi_bedtime[df$psqi_bedtime == "10.00pm"] <- "10:00pm"
+#Remove time for 8am because this was likely a typo - getup time was 5am so hard to determine which time was a typo (e.g., potentially a shift worker) 
+df$psqi_bedtime[df$psqi_bedtime == "8:00am"] <- ""
+##covert characters to datetime objects
 formats <- c("%I:%M%p","%I%M%p", "%I%p")
 df$psqi_bedtime <- parse_date_time(df$psqi_bedtime, orders = formats)
-df$psqi_bedtime <- format(as.POSIXct(df$psqi_bedtime), format = "%H:%M:%S")
-df$psqi_bedtime <- as_hms(df$psqi_bedtime)
+#Add a "day" to all people who went to bed after midnight
+after_midnight <- df$psqi_bedtime < "0000-01-01 12:00:00 UTC" & !is.na(df$psqi_bedtime)
+df$psqi_bedtime[after_midnight] <- df$psqi_bedtime[after_midnight] + days(1)
 
+##Clean getup data the same way as sleep data 
 df$psqi_getup <- sub("(\\d{1,2}:\\d{2}$)", "\\1 AM", df$psqi_getup)
 df$psqi_getup <- sub("a(?!m)", "am", df$psqi_getup, perl = TRUE)
 df$psqi_getup <- gsub(" ", "", df$psqi_getup, ignore.case = TRUE) 
@@ -65,14 +74,12 @@ df$psqi_getup[df$psqi_getup == "530am"] <- "5:30am"
 df$psqi_getup[df$psqi_getup == "545am"] <- "5:45am"
 formats <- c("%I:%M%p","%I%M%p", "%I%p")
 df$psqi_getup <- parse_date_time(df$psqi_getup, orders = formats)
-df$psqi_getup <- format(as.POSIXct(df$psqi_getup), format = "%H:%M:%S")
-df$psqi_getup <- as_hms(df$psqi_getup)
-
+##Add one "day" to all values since they woudl have woken up the following day 
 df$psqi_getup <- df$psqi_getup + days(1)
 
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
 df <- df %>% 
-  mutate(hours_in_bed = difftime(psqi_bedtime, psqi_getup, units = "hours"))
+  mutate(hours_in_bed = difftime(psqi_getup, psqi_bedtime, units = "hours"))
 
 
 #Habitual sleep efficiency: (psqi_sleep/hours spent in bed) X 100 = % 
