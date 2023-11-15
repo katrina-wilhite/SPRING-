@@ -1,5 +1,6 @@
 load(file = "df.RData")
 library(dplyr)
+library(lubridate)
 
 #Subjective sleep quality: Question 6 - psqi_quality; assign component score
 df$quality_scored <- df$psqi_quality
@@ -37,7 +38,15 @@ breakpoints_duration <- c(-Inf, 4.999, 5.999, 6.999, Inf)
 df$sleep_scored <- cut(df$sleep_scored, breaks = breakpoints_duration, labels = c(3,2,1,0), include.lowest = TRUE)
 
 #Habitual sleep efficiency: calculate number of hours spent in bed (question 3 - question 1) - psqi_bedtime & psqi_getup
-##Need to sleep bedtime and getup times first 
+##Need to clean bedtime and getup times first 
+df$psqi_bedtime <- gsub(" ", "", df$psqi_bedtime, ignore.case = TRUE) 
+df$psqi_bedtime <- tolower(df$psqi_bedtime)
+df$psqi_bedtime[df$psqi_bedtime == "11p"] <- "11pm"
+formats <- c("%I:%M%p","%I%M%p", "%I%M", "%I%p")
+df$psqi_bedtime <- parse_date_time(df$psqi_bedtime, orders = formats)
+df$psqi_bedtime <- format(df$psqi_bedtime, format = "%H:%M:%S")
+
+
 
 #Habitual sleep efficiency: (psqi_sleep/hours spent in bed) X 100 = % 
 
