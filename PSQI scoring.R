@@ -107,8 +107,8 @@ for (i in 8:16(df)) {
 
 
 #Use of sleep medication: Question 7 - psqi_meds; assign component score 
-df$psqi_meds_scored <- df$psqi_meds
-df$psqi_meds_scored <- recode(df$psqi_meds_scored,
+df$meds_scored <- df$psqi_meds
+df$meds_scored <- recode(df$meds_scored,
                            "Not during the last month" = 0,
                            "Less than once a week" = 1, 
                            "Once or twice a week" = 2, 
@@ -122,8 +122,8 @@ df$psqi_stayawake_scored <- recode(df$psqi_stayawake_scored,
                                    "Once or twice a week" = 2, 
                                    "Three or more times a week" = 3)
 
-df$psqi_enthusiasm_scored <- df$psqi_enthusiasm
-df$psqi_enthusiasm_scored <- recode(df$psqi_enthusiasm_scored,
+df$enthusiasm_scored <- df$psqi_enthusiasm
+df$enthusiasm_scored <- recode(df$enthusiasm_scored,
                                    "No problem at all" = 0,
                                    "Only a very slight problem" = 1, 
                                    "Somewhat of a problem" = 2, 
@@ -139,3 +139,5 @@ breakpoints_dysfunction <- c(-Inf, 0, 2, 4, 6)
 df$daytime_dysfunction_scored <- cut(df$daytime_dysfunction_sum, breaks = breakpoints_dysfunction, labels = c(0,1,2,3), include.lowest = TRUE)
 
 #Global PSQI Score: sum all 7 components together 
+df <- df %>% 
+  mutate(global_psqi_score = (quality_scored + latency_scored + sleep_scored + efficiency_scored + disturbances_scored + meds_scored +  daytime_dysfunction_scored))
