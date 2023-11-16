@@ -17,7 +17,7 @@ df$quality_scored <- recode(df$quality_scored,
 df$fallasleep_scored <- df$psqi_fallasleep
 breakpoints_latency1 <- c(-Inf, 15, 30, 60, Inf)
 df$fallasleep_scored <- cut(df$fallasleep_scored, breaks = breakpoints_latency1, labels = c(0,1,2,3), include.lowest = TRUE)
-df$fallasleep_scored <- as.numeric(df$fallasleep_scored)
+df$fallasleep_scored <- as.numeric(levels(df$fallasleep_scored))[df$fallasleep_scored]
 
 df$psqi30_scored <- df$psqi_30min
 df$psqi30_scored <- recode(df$psqi30_scored,
@@ -34,11 +34,13 @@ df <- df %>%
 df$latency_scored <- df$latency_sum
 breakpoints_latency2 <- c(-Inf, 0, 2, 4, 6)
 df$latency_scored <- cut(df$latency_scored, breaks = breakpoints_latency2, labels = c(0,1,2,3), include.lowest = TRUE)
+df$latency_scored <- as.numeric(levels(df$latency_scored))[df$latency_scored]
 
 #Sleep duration: Question 4 - psqi_sleep; assign component score 
 df$sleep_scored <- df$psqi_sleep
 breakpoints_duration <- c(-Inf, 4.999, 5.999, 6.999, Inf)
 df$sleep_scored <- cut(df$sleep_scored, breaks = breakpoints_duration, labels = c(3,2,1,0), include.lowest = TRUE)
+df$sleep_scored <- as.numeric(levels(df$sleep_scored))[df$sleep_scored]
 
 #Habitual sleep efficiency; first clean bedtime and getup times psqi_bedtime & psqi_getup
 ##add "pm" to values that don't have it
@@ -99,6 +101,7 @@ df$efficiency <- round(df$efficiency, digits = 0)
 df$efficiency_scored <- df$efficiency
 breakpoints_efficiency <- c(-Inf, 65, 75, 85, Inf)
 df$efficiency_scored <- cut(df$efficiency_scored, breaks = breakpoints_efficiency, labels = c(3,2,1,0), include.lowest = TRUE)
+df$efficiency_scored <- as.numeric(levels(df$efficiency_scored))[df$efficiency_scored]
 
 #Sleep disturbances: questions 5b-5j - psqi_middle:psqi_other2; assign component subscores for each 
 ##First, move psqi_other as this is optional and a character column 
@@ -113,7 +116,6 @@ df$dream_scored <-df$psqi_dream
 df$pain_scored <-df$psqi_pain
 df$other2_scored <-df$psqi_other2
 
-##Change NA values of other2_scored to 0 
 
 for (i in 34:42) {
   df[,i] <- recode(df[,i],
@@ -123,6 +125,7 @@ for (i in 34:42) {
          "Three or more times a week" = 3)
 }
 
+##Change NA values of other2_scored to 0 
 df$other2_scored[is.na(df$other2_scored)] <- 0
 
 
@@ -134,6 +137,7 @@ df <- df %>%
 df$disturbances_scored <- df$disturbances_sum
 breakpoints_disturbances <- c(-Inf, 0, 8, 18, 27)
 df$disturbances_scored <- cut(df$disturbances_scored, breaks = breakpoints_disturbances, labels = c(0, 1, 2, 3), include.lowest = TRUE)
+df$disturbances_scored <- as.numeric(levels(df$disturbances_scored))[df$disturbances_scored]
 
 #Use of sleep medication: Question 7 - psqi_meds; assign component score 
 df$meds_scored <- df$psqi_meds
@@ -144,8 +148,8 @@ df$meds_scored <- recode(df$meds_scored,
                            "Three or more times a week" = 3)
 
 #Daytime dysfunction: Questions 8 and 9; psqi_stayawake & psqi_enthusiasm; assign component subscores for each 
-df$psqi_stayawake_scored <- df$psqi_stayawake
-df$psqi_stayawake_scored <- recode(df$psqi_stayawake_scored,
+df$stayawake_scored <- df$psqi_stayawake
+df$stayawake_scored <- recode(df$stayawake_scored,
                                    "Not during the last month" = 0,
                                    "Less than once a week" = 1, 
                                    "Once or twice a week" = 2, 
@@ -160,12 +164,13 @@ df$enthusiasm_scored <- recode(df$enthusiasm_scored,
 
 #Daytime dysfunction: sum scores of psqi_stayawake & psqi_enthusiasm 
 df <- df %>% 
-  mutate(daytime_dysfunction_sum = (psqi_stayawake_scored + psqi_enthusiasm_scored))
+  mutate(daytime_dysfunction_sum = (stayawake_scored + enthusiasm_scored))
 
 #Daytime dysfunction: assign component score 
-df$daytime_dysfunction_sum <- df$daytime_dysfunction_sum
+df$daytime_dysfunction_scored <- df$daytime_dysfunction_sum
 breakpoints_dysfunction <- c(-Inf, 0, 2, 4, 6)
 df$daytime_dysfunction_scored <- cut(df$daytime_dysfunction_sum, breaks = breakpoints_dysfunction, labels = c(0,1,2,3), include.lowest = TRUE)
+df$daytime_dysfunction_scored <- as.numeric(levels(df$daytime_dysfunction_scored))[df$daytime_dysfunction_scored]
 
 #Global PSQI Score: sum all 7 components together 
 df <- df %>% 
