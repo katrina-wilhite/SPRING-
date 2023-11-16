@@ -173,5 +173,7 @@ df$daytime_dysfunction_scored <- cut(df$daytime_dysfunction_sum, breaks = breakp
 df$daytime_dysfunction_scored <- as.numeric(levels(df$daytime_dysfunction_scored))[df$daytime_dysfunction_scored]
 
 #Global PSQI Score: sum all 7 components together 
-df <- df %>% 
+df_scored <- df %>% 
   mutate(global_psqi_score = (quality_scored + latency_scored + sleep_scored + efficiency_scored + disturbances_scored + meds_scored +  daytime_dysfunction_scored))
+
+save(df_scored, file = 'df_scored.RData', envir = globalenv())
