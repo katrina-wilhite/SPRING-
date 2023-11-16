@@ -103,7 +103,19 @@ df$efficiency_scored <- cut(df$efficiency_scored, breaks = breakpoints_efficienc
 #Sleep disturbances: questions 5b-5j - psqi_middle:psqi_other2; assign component subscores for each 
 ##First, move psqi_other as this is optional and a character column 
 df <- relocate(df, psqi_other, .after = psqi_other2)
-for (i in 8:16(df)) {
+df$middle_scored <- df$psqi_middle
+df$bathroom_scored <-df$psqi_bathroom
+df$breath_scored <-df$psqi_breathe
+df$snore_scored <-df$psqi_snore
+df$cold_scored <-df$psqi_cold
+df$hot_scored <-df$psqi_hot
+df$dream_scored <-df$psqi_dream
+df$pain_scored <-df$psqi_pain
+df$other2_scored <-df$psqi_other2
+
+##Change NA values of other2_scored to 0 
+
+for (i in 34:42) {
   df[,i] <- recode(df[,i],
          "Not during the past month" = 0,
          "Less than once a week" = 1, 
@@ -111,12 +123,17 @@ for (i in 8:16(df)) {
          "Three or more times a week" = 3)
 }
 
+df$other2_scored[is.na(df$other2_scored)] <- 0
 
-#Sleep disturbances: Sum scores of psqi_middle:psqi_other2 
 
+#Sleep disturbances: Sum scores of middlescored:other2_scored
+df <- df %>% 
+  mutate(disturbances_sum = rowSums(across(middle_scored:other2_scored)))
 
 #Sleep disturbances: assign component score 
-
+df$disturbances_scored <- df$disturbances_sum
+breakpoints_disturbances <- c(-Inf, 0, 8, 18, 27)
+df$disturbances_scored <- cut(df$disturbances_scored, breaks = breakpoints_disturbances, labels = c(0, 1, 2, 3), include.lowest = TRUE)
 
 #Use of sleep medication: Question 7 - psqi_meds; assign component score 
 df$meds_scored <- df$psqi_meds
