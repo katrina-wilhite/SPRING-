@@ -1,37 +1,37 @@
-load(file = "df_scored.RData")
+load(file = "df_complete.RData")
 
 #install.packages("lme4")
 library("lme4")
 
 global_model <- lmer(global_psqi_score ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 
 lmer(quality_scored ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(psqi_fallasleep ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(psqi_sleep ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(efficiency ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(disturbances_scored ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(meds_scored ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
 
 lmer(daytime_dysfunction_scored ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_scored, subset = redcap_event_name == c("visit_2_arm_1", "visit_3_arm_1"))
+       (1 | redcap_event_name), data = df_complete)
