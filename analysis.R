@@ -5,8 +5,12 @@ library("lme4")
 
 global_model <- lmer(global_psqi_score ~ 1 + 
        randomization + (1 | record_id) +
-       (1 | redcap_event_name), data = df_complete)
+       (1 | redcap_event_name) +
+         (1 | global_psqi_score_baseline), data = df_complete)
 
+coef(global_model)
+anova(global_model)
+summary(global_model)
 
 lmer(quality_scored ~ 1 + 
        randomization + (1 | record_id) +
