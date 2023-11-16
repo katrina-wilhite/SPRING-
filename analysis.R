@@ -4,9 +4,7 @@ load(file = "df_complete.RData")
 library("lme4")
 
 global_model <- lmer(global_psqi_score ~ 1 + 
-       randomization + (1 | record_id) +
-       (1 | redcap_event_name) +
-         (1 | global_psqi_score_baseline), data = df_complete)
+       randomization + (1 | record_id), data = df_complete)
 
 coef(global_model)
 anova(global_model)
