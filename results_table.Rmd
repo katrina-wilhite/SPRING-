@@ -15,8 +15,10 @@ library("kableExtra")
 
 
 ```{r}
-quality_effects <- round(fixef(quality_model), digits = 2)
-quality_se <- round(sqrt(diag(vcov(quality_model))), digits = 2)
+quality_effects <- as.data.frame(round(fixef(quality_model), digits = 2))
+quality_effects <- quality_effects[-c(1,3),]
+quality_se <- as.data.frame(round(sqrt(diag(vcov(quality_model))), digits = 2))
+quality_se <- quality_se[-c(1,3),]
 quality_chisq <- round(quality_results$Chisq, digits = 2)
 quality_p <- round(quality_results$"Pr(>Chisq)", digits = 2)
 results_quality <- data.frame(Estimate = paste0(quality_effects, " (", quality_se, ")"),
@@ -27,73 +29,85 @@ results_quality$Sleep_Component <- "Subjective Sleep Quality"
 ```
 
 ```{r}
-latency_effects <- round(fixef(latency_model), digits = 2) 
-latency_se <- round(sqrt(diag(vcov(latency_model))), digits = 2)
+latency_effects <- as.data.frame(round(fixef(latency_model), digits = 2))
+latency_effects <- latency_effects[-c(1,3),]
+latency_se <- as.data.frame(round(sqrt(diag(vcov(latency_model))), digits = 2))
+latency_se <- latency_se[-c(1,3),]
 latency_chisq <- round(latency_results$Chisq, digits = 2)
 latency_p <- round(latency_results$"Pr(>Chisq)", digits = 2)
-results_latency <- data.frame(Estimate = paste0(latency_effects, " (", quality_se, ")"),
+results_latency <- data.frame(Estimate = paste0(latency_effects, " (", latency_se, ")"),
                               X2 = latency_chisq,
-                              "p" = latency_p)
+                              p = latency_p)
 results_latency <- results_latency[-1,]
 results_latency$Sleep_Component <- "Latency"
 ```
 
 ```{r}
-duration_effects <- round(fixef(duration_model), digits = 2)
-duration_se <- round(sqrt(diag(vcov(duration_model))), digits = 2)
+duration_effects <- as.data.frame(round(fixef(duration_model), digits = 2))
+duration_effects <- duration_effects[-c(1,3),]
+duration_se <- as.data.frame(round(sqrt(diag(vcov(duration_model))), digits = 2))
+duration_se <- duration_se[-c(1,3),]
 duration_chisq <- round(duration_results$Chisq, digits = 2)
 duration_p <- round(duration_results$"Pr(>Chisq)", digits = 2)
-results_duration <- data.frame(Estimate = paste0(duration_effects, " (", quality_se, ")"),
+results_duration <- data.frame(Estimate = paste0(duration_effects, " (", duration_se, ")"),
                               X2 = duration_chisq,
-                              "p" = duration_p)
+                              p = duration_p)
 results_duration <- results_duration[-1,]
 results_duration$Sleep_Component <- "Duration"
 ```
 
 ```{r}
-efficiency_effects <- round(fixef(efficiency_model), digits = 2)
-efficiency_se <- round(sqrt(diag(vcov(efficiency_model))), digits = 2)
+efficiency_effects <- as.data.frame(round(fixef(efficiency_model), digits = 2))
+efficiency_effects <- efficiency_effects[-c(1,3),]
+efficiency_se <- as.data.frame(round(sqrt(diag(vcov(efficiency_model))), digits = 2))
+efficiency_se <- efficiency_se[-c(1,3),]
 efficiency_chisq <- round(efficiency_results$Chisq, digits = 2)
 efficiency_p <- round(efficiency_results$"Pr(>Chisq)", digits = 2)
-results_efficiency <- data.frame(Estimate = paste0(efficiency_effects, " (", quality_se, ")"),
+results_efficiency <- data.frame(Estimate = paste0(efficiency_effects, " (", efficiency_se, ")"),
                               X2 = efficiency_chisq,
-                              "p" = efficiency_p)
+                              p = efficiency_p)
 results_efficiency <- results_efficiency[-1,]
 results_efficiency$Sleep_Component <- "Efficiency"
 ```
 
 ```{r}
-disturbances_effects <- round(fixef(disturbances_model), digits = 2)
-disturbances_se <- round(sqrt(diag(vcov(disturbances_model))), digits = 2)
+disturbances_effects <- as.data.frame(round(fixef(disturbances_model), digits = 2))
+disturbances_effects <- disturbances_effects[-c(1,3),]
+disturbances_se <- as.data.frame(round(sqrt(diag(vcov(disturbances_model))), digits = 2))
+disturbances_se <- disturbances_se[-c(1,3),]
 disturbances_chisq <- round(disturbances_results$Chisq, digits = 2)
 disturbances_p <- round(disturbances_results$"Pr(>Chisq)", digits = 2)
-results_disturbances <- data.frame(Estimate = paste0(disturbances_effects, " (", quality_se, ")"),
+results_disturbances <- data.frame(Estimate = paste0(disturbances_effects, " (", disturbances_se, ")"),
                               X2 = disturbances_chisq,
-                              "p" = disturbances_p)
+                              p = disturbances_p)
 results_disturbances <- results_disturbances[-1,]
 results_disturbances$Sleep_Component <- "Disturbances"
 ```
 
 ```{r}
-daytime_dysfunction_effects <- round(fixef(daytime_dysfunction_model), digits = 2)
-daytime_dysfunction_se <- round(sqrt(diag(vcov(daytime_dysfunction_model))), digits = 2)
+daytime_dysfunction_effects <- as.data.frame(round(fixef(daytime_dysfunction_model), digits = 2))
+daytime_dysfunction_effects <- daytime_dysfunction_effects[-c(1,3),]
+daytime_dysfunction_se <- as.data.frame(round(sqrt(diag(vcov(daytime_dysfunction_model))), digits = 2))
+daytime_dysfunction_se <- daytime_dysfunction_se[-c(1,3),]
 daytime_dysfunction_chisq <- round(daytime_dysfunction_results$Chisq, digits = 2)
 daytime_dysfunction_p <- round(daytime_dysfunction_results$"Pr(>Chisq)", digits = 2)
-results_daytime_dysfunction <- data.frame(Estimate = paste0(daytime_dysfunction_effects, " (", quality_se, ")"),
+results_daytime_dysfunction <- data.frame(Estimate = paste0(daytime_dysfunction_effects, " (", daytime_dysfunction_se, ")"),
                               X2 = daytime_dysfunction_chisq,
-                              "p" = daytime_dysfunction_p)
+                              p = daytime_dysfunction_p)
 results_daytime_dysfunction <- results_daytime_dysfunction[-1,]
 results_daytime_dysfunction$Sleep_Component <- "Daytime Dysfunction"
 ```
 
 ```{r}
-global_effects <- round(fixef(global_model), digits = 2)
-global_se <- round(sqrt(diag(vcov(global_model))), digits = 2)
+global_effects <- as.data.frame(round(fixef(global_model), digits = 2))
+global_effects <- global_effects[-c(1,3),]
+global_se <- as.data.frame(round(sqrt(diag(vcov(global_model))), digits = 2))
+global_se <- global_se[-c(1,3),]
 global_chisq <- round(global_results$Chisq, digits = 2)
 global_p <- round(global_results$"Pr(>Chisq)", digits = 2)
-results_global <- data.frame(Estimate = paste0(global_effects, " (", quality_se, ")"),
+results_global <- data.frame(Estimate = paste0(global_effects, " (", global_se, ")"),
                               X2 = global_chisq,
-                              "p" = global_p)
+                              p = global_p)
 results_global <- results_global[-1,]
 results_global$Sleep_Component <- "Global PSQI Score"
 ```
@@ -109,7 +123,7 @@ colnames(sleep_results)[colnames(sleep_results) == "Estimate"] <- "Estimate (SE)
 ```{r}
 sleep_results %>% 
   kbl() %>% 
-  column_spec(4, bold = ifelse(sleep_results$p == 0.04, TRUE, FALSE)) %>% 
+  column_spec(4, bold = ifelse(sleep_results$p == 0.02, TRUE, FALSE)) %>% 
   kable_classic()
 ```
 
