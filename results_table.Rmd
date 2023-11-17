@@ -1,0 +1,94 @@
+---
+title: "results_table"
+output: word_document
+date: "2023-11-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+quality_effects <- fixef(quality_model)
+quality_se <- sqrt(diag(vcov(quality_model)))
+quality_p <- quality_results$"Pr(>Chisq)"
+results_quality <- data.frame(Estimate = quality_effects,
+                              Standard_Error = quality_se,
+                              p = quality_p)
+results_quality <- results_quality[-1,]
+results_quality$Sleep_Component <- "Subjective Sleep Quality"
+```
+
+```{r}
+latency_effects <- fixef(latency_model)
+latency_se <- sqrt(diag(vcov(latency_model)))
+latency_p <- latency_results$"Pr(>Chisq)"
+results_latency <- data.frame(Estimate = latency_effects,
+                              Standard_Error = latency_se,
+                              p = latency_p)
+results_latency <- results_latency[-1,]
+results_latency$Sleep_Component <- "Latency"
+```
+
+```{r}
+duration_effects <- fixef(duration_model)
+duration_se <- sqrt(diag(vcov(duration_model)))
+duration_p <- duration_results$"Pr(>Chisq)"
+results_duration <- data.frame(Estimate = duration_effects,
+                              Standard_Error = duration_se,
+                              p = duration_p)
+results_duration <- results_duration[-1,]
+results_duration$Sleep_Component <- "Duration"
+```
+
+```{r}
+efficiency_effects <- fixef(efficiency_model)
+efficiency_se <- sqrt(diag(vcov(efficiency_model)))
+efficiency_p <- efficiency_results$"Pr(>Chisq)"
+results_efficiency <- data.frame(Estimate = efficiency_effects,
+                              Standard_Error = efficiency_se,
+                              p = efficiency_p)
+results_efficiency <- results_efficiency[-1,]
+results_efficiency$Sleep_Component <- "Efficiency"
+```
+
+```{r}
+disturbances_effects <- fixef(disturbances_model)
+disturbances_se <- sqrt(diag(vcov(disturbances_model)))
+disturbances_p <- disturbances_results$"Pr(>Chisq)"
+results_disturbances <- data.frame(Estimate = disturbances_effects,
+                              Standard_Error = disturbances_se,
+                              p = disturbances_p)
+results_disturbances <- results_disturbances[-1,]
+results_disturbances$Sleep_Component <- "Disturbances"
+```
+
+```{r}
+daytime_dysfunction_effects <- fixef(daytime_dysfunction_model)
+daytime_dysfunction_se <- sqrt(diag(vcov(daytime_dysfunction_model)))
+daytime_dysfunction_p <- daytime_dysfunction_results$"Pr(>Chisq)"
+results_daytime_dysfunction <- data.frame(Estimate = daytime_dysfunction_effects,
+                              Standard_Error = daytime_dysfunction_se,
+                              p = daytime_dysfunction_p)
+results_daytime_dysfunction <- results_daytime_dysfunction[-1,]
+results_daytime_dysfunction$Sleep_Component <- "Daytime Dysfunction"
+```
+
+```{r}
+global_effects <- fixef(global_model)
+global_se <- sqrt(diag(vcov(global_model)))
+global_p <- global_results$"Pr(>Chisq)"
+results_global <- data.frame(Estimate = global_effects,
+                              Standard_Error = global_se,
+                              p = global_p)
+results_global <- results_global[-1,]
+results_global$Sleep_Component <- "Global PSQI Score"
+```
+
+```{r}
+df_list <- list(results_quality, results_latency, results_duration, results_efficiency, results_disturbances, results_daytime_dysfunction, results_global)
+Reduce(function(x,y) merge(x, y, all= TRUE), df_list)
+```
+
+
