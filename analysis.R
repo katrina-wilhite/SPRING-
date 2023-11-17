@@ -3,8 +3,15 @@ load(file = "df_complete.RData")
 #install.packages("lme4")
 library("lme4")
 
-global_model <- lmer(global_psqi_score ~ 1 + 
-       randomization + (1 | record_id), data = df_complete)
+df_complete <- df_complete[which(complete.cases(df_complete[,"global_psqi_score"])),]
+
+global_model <- lmer(global_psqi_score ~ randomization + 
+       (1 | record_id), data = df_complete, REML = FALSE)
+
+global_reduced <- lmer(global_psqi_score ~  + 
+       (1 | record_id), data = df_complete, REML = FALSE)
+
+anova(global_reduced,global_model)
 
 coef(global_model)
 anova(global_model)
