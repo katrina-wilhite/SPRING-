@@ -10,3 +10,5 @@ colnames(df_baseline)[2:16] <- paste(colnames(df_baseline)[2:16], 'baseline', se
 df_follow_up <- subset(df_scored, redcap_event_name != "baseline_arm_1")
 
 df_complete <- left_join(df_follow_up, df_baseline, by='record_id')
+
+save(df_complete, file = "df_complete.RData", envir = globalenv())
