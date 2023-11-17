@@ -13,7 +13,7 @@ library("dplyr")
 #Select relevant columns 
 df <- SPRING %>% 
   select(c(record_id:redcap_event_name, psqi_bedtime:psqi_enthusiasm, randomization)) %>% 
-  subset(redcap_event_name != "medical_chart_abst_arm_1")
+  subset(redcap_event_name != "medical_chart_abst_arm_1" & !is.na(randomization)) 
 
 save(df, file = 'df.RData', envir = globalenv())
 
