@@ -7,10 +7,10 @@ df_complete <- df_complete[which(complete.cases(df_complete[,"global_psqi_score"
 
 #Run mixed effects model for global PSQI score
 ##Build full model
-global_model <- lmer(global_psqi_score ~ randomization + global_psqi_score_baseline +
+global_model <- lmer(global_psqi_score ~ randomization + global_psqi_score_baseline + redcap_event_name +
        (1 | record_id), data = df_complete, REML = FALSE)
 ##Build reduced model
-global_reduced <- lmer(global_psqi_score ~  + global_psqi_score_baseline +
+global_reduced <- lmer(global_psqi_score ~  + global_psqi_score_baseline + redcap_event_name +
        (1 | record_id), data = df_complete, REML = FALSE)
 ##Compare models 
 global_results <- anova(global_reduced,global_model)
