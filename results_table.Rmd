@@ -122,8 +122,8 @@ colnames(sleep_results)[colnames(sleep_results) == "Estimate"] <- "Estimate (SE)
 
 ```{r}
 sleep_results %>% 
-  kbl() %>% 
+  kbl(caption = "Table. Sleep Effects.") %>% 
   column_spec(4, bold = ifelse(sleep_results$p == 0.02, TRUE, FALSE)) %>% 
-  kable_classic()
+  kable_classic() 
 ```
 
