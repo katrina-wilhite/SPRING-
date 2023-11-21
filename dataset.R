@@ -13,15 +13,6 @@ library("dplyr")
 #Select relevant columns 
 df <- SPRING %>% 
   select(c(record_id:redcap_event_name, psqi_bedtime:psqi_enthusiasm, randomization)) %>% 
-  subset(redcap_event_name != "medical_chart_abst_arm_1" & !is.na(randomization)) 
+  subset(redcap_event_name != "medical_chart_abst_arm_1" & !is.na(randomization) & !is.na(psqi_sleep))
 
 save(df, file = 'df.RData', envir = globalenv())
-
-
-SPRING$dem_age <- as.numeric(SPRING$dem_age)
-  
-df_dem <- SPRING %>% 
-  subset(redcap_event_name != "medical_chart_abst_arm_1" & !is.na(randomization) & !is.na(dem_age)) 
-
-mean(df_dem$dem_age)
-sd(df_dem$dem_age)
