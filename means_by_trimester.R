@@ -133,7 +133,7 @@ disturbances_se <- disturbances_se[-c(1,3:4),]
 disturbances_p <- as.data.frame(round(disturbances_results$"Pr(>Chisq)", digits = 2))
 disturbances_p <- disturbances_p[-1,]
 
-combined_disturbances <- data.frame(Sleep_Outcome = c("disturbances PSQI Score", ""),
+combined_disturbances <- data.frame(Sleep_Outcome = c("Disturbances", ""),
                               Group = c("Intervention", "Control"),
                               Baseline = paste0(combined_baseline_mean_disturbances, " (", combined_baseline_sd_disturbances, ")"),
                               Second_Trimester = paste0(combined_trim2_mean_disturbances, " (", combined_trim2_sd_disturbances, ")"),
@@ -142,4 +142,5 @@ combined_disturbances <- data.frame(Sleep_Outcome = c("disturbances PSQI Score",
                               p = c("", disturbances_p),
                               Cohens_d = c("", disturbances_cohens_d)
 )
+
 
