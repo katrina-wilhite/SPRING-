@@ -1,0 +1,37 @@
+---
+title: "abstract_table"
+output: html_document
+date: "2023-11-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(kableExtra)
+```
+
+
+```{r}
+source("C:/Users/klw00024/Documents/SPRING-/means_by_trimester.R")
+```
+
+```{r}
+abstract_table <- rbind(combined_global, combined_duration, combined_disturbances)
+names(abstract_table) <- stringr::str_replace(names(abstract_table), "_", " ")
+colnames(abstract_table)[colnames(abstract_table) == 'Estimate'] <- "Estimate (SE)"
+colnames(abstract_table)[colnames(abstract_table) == 'Cohens d'] <- "Cohen's d"
+abstract_table$`Third Trimester`[abstact_table$`Third Trimester` == "7 (3.6)"] <- "7.00 (3.60)"
+abstract_table$Baseline[abstact_table$Baseline == "1.67 (0.6)"] <- "1.67 (0.60)"
+abstract_table$Baseline[abstact_table$Baseline == "1.62 (0.5)"] <- "1.62 (0.50)"
+```
+
+```{r}
+abstract_table %>% 
+  kbl(caption = "Table. Effects of SPRING Intervention on Sleep Outcomes Across Pregnancy") %>% 
+  kable_classic() %>% 
+  footnote("Global PSQI Score points range 0-21; Disturbances points range 0 -3; 0 indicates no sleep difficulties and higher scores indicate increasingly severe sleep difficulties; Bold results are significant.") %>% 
+  column_spec(7, bold = ifelse(abstract_table$p == "0.01", TRUE, FALSE))
+```
+
