@@ -15,3 +15,5 @@ df <- SPRING %>%
   select(c(record_id:redcap_event_name, psqi_bedtime:psqi_enthusiasm, randomization)) %>% 
   subset(redcap_event_name != "medical_chart_abst_arm_1" & !is.na(randomization) & !is.na(psqi_sleep))
 
+
+save(df, file = 'df.RData', envir = globalenv())
