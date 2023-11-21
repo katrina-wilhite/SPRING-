@@ -49,7 +49,7 @@ duration_se <- duration_se[-c(1,3:4),]
 duration_p <- as.data.frame(round(duration_results$"Pr(>Chisq)", digits = 2))
 duration_p <- duration_p[-1,]
 
-combined_duration <- data.frame(Sleep_Outcome = c("Duration", ""),
+combined_duration <- data.frame(Sleep_Outcome = c("Duration (hrs)", ""),
                                 Group = c("Intervention", "Control"),
                                 Baseline = paste0(combined_baseline_mean_duration, " (", combined_baseline_sd_duration, ")"),
                                 Second_Trimester = paste0(combined_trim2_mean_duration, " (", combined_trim2_sd_duration, ")"),
@@ -91,7 +91,7 @@ global_se <- global_se[-c(1,3:4),]
 global_p <- as.data.frame(round(global_results$"Pr(>Chisq)", digits = 2))
 global_p <- global_p[-1,]
 
-combined_global <- data.frame(Sleep_Outcome = c("Global PSQI Score", ""),
+combined_global <- data.frame(Sleep_Outcome = c("Global PSQI Score (pts)", ""),
                                 Group = c("Intervention", "Control"),
                                 Baseline = paste0(combined_baseline_mean_global, " (", combined_baseline_sd_global, ")"),
                                 Second_Trimester = paste0(combined_trim2_mean_global, " (", combined_trim2_sd_global, ")"),
@@ -133,7 +133,7 @@ disturbances_se <- disturbances_se[-c(1,3:4),]
 disturbances_p <- as.data.frame(round(disturbances_results$"Pr(>Chisq)", digits = 2))
 disturbances_p <- disturbances_p[-1,]
 
-combined_disturbances <- data.frame(Sleep_Outcome = c("Disturbances", ""),
+combined_disturbances <- data.frame(Sleep_Outcome = c("Disturbances (pts)", ""),
                               Group = c("Intervention", "Control"),
                               Baseline = paste0(combined_baseline_mean_disturbances, " (", combined_baseline_sd_disturbances, ")"),
                               Second_Trimester = paste0(combined_trim2_mean_disturbances, " (", combined_trim2_sd_disturbances, ")"),
