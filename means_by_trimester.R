@@ -303,7 +303,7 @@ daytime_dysfunction_se <- daytime_dysfunction_se[-c(1,3:4),]
 daytime_dysfunction_p <- as.data.frame(round(daytime_dysfunction_results$"Pr(>Chisq)", digits = 2))
 daytime_dysfunction_p <- daytime_dysfunction_p[-1,]
 
-combined_daytime_dysfunction <- data.frame(Sleep_Outcome = c("daytime_dysfunction (points)", ""),
+combined_daytime_dysfunction <- data.frame(Sleep_Outcome = c("Daytime Dysfunction (points)", ""),
                                Group = c("Intervention", "Control"),
                                Baseline = paste0(combined_baseline_mean_daytime_dysfunction, " (", combined_baseline_sd_daytime_dysfunction, ")"),
                                Second_Trimester = paste0(combined_trim2_mean_daytime_dysfunction, " (", combined_trim2_sd_daytime_dysfunction, ")"),
