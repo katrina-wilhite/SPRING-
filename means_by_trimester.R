@@ -1,5 +1,5 @@
 #Find means of sleep duration, global psqi scores, and sleep distrubances per visits by randomization
-
+library(dplyr)
 df_control1 <- df_scored %>% 
   filter(randomization == 0, redcap_event_name == "baseline_arm_1") 
 
@@ -143,4 +143,173 @@ combined_disturbances <- data.frame(Sleep_Outcome = c("Disturbances (points)", "
                               Cohens_d = c("", disturbances_cohens_d)
 )
 
+
+#Subjective Sleep Quality 
+baseline_quality_ctrl <- mean(df_control1$quality_scored)
+trim2_quality_ctrl <- mean(df_control2$quality_scored)
+trim3_quality_ctrl <- mean(df_control3$quality_scored)
+baseline_sd_quality_ctrl <- sd(df_control1$quality_scored)
+trim2_sd_quality_ctrl <- sd(df_control2$quality_scored)
+trim3_sd_quality_ctrl <- sd(df_control3$quality_scored)
+
+baseline_quality_int <- mean(df_intervention1$quality_scored, na.rm = TRUE)
+trim2_quality_int <- mean(df_intervention2$quality_scored, na.rm = TRUE)
+trim3_quality_int <- mean(df_intervention3$quality_scored, na.rm = TRUE)
+baseline_sd_quality_int <- sd(df_intervention1$quality_scored, na.rm = TRUE)
+trim2_sd_quality_int <- sd(df_intervention2$quality_scored, na.rm = TRUE)
+trim3_sd_quality_int <- sd(df_intervention3$quality_scored, na.rm = TRUE)
+
+combined_baseline_mean_quality <- round(rbind(baseline_quality_int, baseline_quality_ctrl), digits = 2)
+combined_baseline_sd_quality <- round(rbind(baseline_sd_quality_int, baseline_sd_quality_ctrl), digits = 2)
+combined_trim2_mean_quality <- round(rbind(trim2_quality_int, trim2_quality_ctrl), digits = 2)
+combined_trim2_sd_quality <- round(rbind(trim2_sd_quality_int, trim2_sd_quality_ctrl), digits = 2)
+combined_trim3_mean_quality <- round(rbind(trim3_quality_int, trim3_quality_ctrl), digits = 2)
+combined_trim3_sd_quality <- round(rbind(trim3_sd_quality_int, trim3_sd_quality_ctrl), digits = 2)
+
+quality_effects <- as.data.frame(round(fixef(quality_model), digits = 2))
+quality_effects <- quality_effects[-c(1,3:4),]
+sd_quality_total <- sd(df_scored$quality_scored, na.rm = TRUE)
+quality_cohens_d <- round(abs(quality_effects/sd_quality_total), digits = 2)
+
+quality_se <- as.data.frame(round(sqrt(diag(vcov(quality_model))), digits = 2))
+quality_se <- quality_se[-c(1,3:4),]
+quality_p <- as.data.frame(round(quality_results$"Pr(>Chisq)", digits = 2))
+quality_p <- quality_p[-1,]
+
+combined_quality <- data.frame(Sleep_Outcome = c("Quality (points)", ""),
+                                    Group = c("Intervention", "Control"),
+                                    Baseline = paste0(combined_baseline_mean_quality, " (", combined_baseline_sd_quality, ")"),
+                                    Second_Trimester = paste0(combined_trim2_mean_quality, " (", combined_trim2_sd_quality, ")"),
+                                    Third_Trimester = paste0(combined_trim3_mean_quality, " (", combined_trim3_sd_quality, ")"),
+                                    Estimate = c("", paste0(quality_effects, " (", quality_se, ")")),
+                                    p = c("", quality_p),
+                                    Cohens_d = c("", quality_cohens_d)
+)
+
+#Sleep latency 
+baseline_latency_ctrl <- mean(df_control1$latency_scored)
+trim2_latency_ctrl <- mean(df_control2$latency_scored)
+trim3_latency_ctrl <- mean(df_control3$latency_scored)
+baseline_sd_latency_ctrl <- sd(df_control1$latency_scored)
+trim2_sd_latency_ctrl <- sd(df_control2$latency_scored)
+trim3_sd_latency_ctrl <- sd(df_control3$latency_scored)
+
+baseline_latency_int <- mean(df_intervention1$latency_scored, na.rm = TRUE)
+trim2_latency_int <- mean(df_intervention2$latency_scored, na.rm = TRUE)
+trim3_latency_int <- mean(df_intervention3$latency_scored, na.rm = TRUE)
+baseline_sd_latency_int <- sd(df_intervention1$latency_scored, na.rm = TRUE)
+trim2_sd_latency_int <- sd(df_intervention2$latency_scored, na.rm = TRUE)
+trim3_sd_latency_int <- sd(df_intervention3$latency_scored, na.rm = TRUE)
+
+combined_baseline_mean_latency <- round(rbind(baseline_latency_int, baseline_latency_ctrl), digits = 2)
+combined_baseline_sd_latency <- round(rbind(baseline_sd_latency_int, baseline_sd_latency_ctrl), digits = 2)
+combined_trim2_mean_latency <- round(rbind(trim2_latency_int, trim2_latency_ctrl), digits = 2)
+combined_trim2_sd_latency <- round(rbind(trim2_sd_latency_int, trim2_sd_latency_ctrl), digits = 2)
+combined_trim3_mean_latency <- round(rbind(trim3_latency_int, trim3_latency_ctrl), digits = 2)
+combined_trim3_sd_latency <- round(rbind(trim3_sd_latency_int, trim3_sd_latency_ctrl), digits = 2)
+
+latency_effects <- as.data.frame(round(fixef(latency_model), digits = 2))
+latency_effects <- latency_effects[-c(1,3:4),]
+sd_latency_total <- sd(df_scored$latency_scored, na.rm = TRUE)
+latency_cohens_d <- round(abs(latency_effects/sd_latency_total), digits = 2)
+
+latency_se <- as.data.frame(round(sqrt(diag(vcov(latency_model))), digits = 2))
+latency_se <- latency_se[-c(1,3:4),]
+latency_p <- as.data.frame(round(latency_results$"Pr(>Chisq)", digits = 2))
+latency_p <- latency_p[-1,]
+
+combined_latency <- data.frame(Sleep_Outcome = c("Latency (points)", ""),
+                               Group = c("Intervention", "Control"),
+                               Baseline = paste0(combined_baseline_mean_latency, " (", combined_baseline_sd_latency, ")"),
+                               Second_Trimester = paste0(combined_trim2_mean_latency, " (", combined_trim2_sd_latency, ")"),
+                               Third_Trimester = paste0(combined_trim3_mean_latency, " (", combined_trim3_sd_latency, ")"),
+                               Estimate = c("", paste0(latency_effects, " (", latency_se, ")")),
+                               p = c("", latency_p),
+                               Cohens_d = c("", latency_cohens_d)
+)
+
+
+#habitual sleep Efficiecny
+baseline_efficiency_ctrl <- mean(df_control1$efficiency)
+trim2_efficiency_ctrl <- mean(df_control2$efficiency)
+trim3_efficiency_ctrl <- mean(df_control3$efficiency)
+baseline_sd_efficiency_ctrl <- sd(df_control1$efficiency)
+trim2_sd_efficiency_ctrl <- sd(df_control2$efficiency)
+trim3_sd_efficiency_ctrl <- sd(df_control3$efficiency)
+
+baseline_efficiency_int <- mean(df_intervention1$efficiency, na.rm = TRUE)
+trim2_efficiency_int <- mean(df_intervention2$efficiency, na.rm = TRUE)
+trim3_efficiency_int <- mean(df_intervention3$efficiency, na.rm = TRUE)
+baseline_sd_efficiency_int <- sd(df_intervention1$efficiency, na.rm = TRUE)
+trim2_sd_efficiency_int <- sd(df_intervention2$efficiency, na.rm = TRUE)
+trim3_sd_efficiency_int <- sd(df_intervention3$efficiency, na.rm = TRUE)
+
+combined_baseline_mean_efficiency <- round(rbind(baseline_efficiency_int, baseline_efficiency_ctrl), digits = 2)
+combined_baseline_sd_efficiency <- round(rbind(baseline_sd_efficiency_int, baseline_sd_efficiency_ctrl), digits = 2)
+combined_trim2_mean_efficiency <- round(rbind(trim2_efficiency_int, trim2_efficiency_ctrl), digits = 2)
+combined_trim2_sd_efficiency <- round(rbind(trim2_sd_efficiency_int, trim2_sd_efficiency_ctrl), digits = 2)
+combined_trim3_mean_efficiency <- round(rbind(trim3_efficiency_int, trim3_efficiency_ctrl), digits = 2)
+combined_trim3_sd_efficiency <- round(rbind(trim3_sd_efficiency_int, trim3_sd_efficiency_ctrl), digits = 2)
+
+efficiency_effects <- as.data.frame(round(fixef(efficiency_model), digits = 2))
+efficiency_effects <- efficiency_effects[-c(1,3:4),]
+sd_efficiency_total <- sd(df_scored$efficiency, na.rm = TRUE)
+efficiency_cohens_d <- round(abs(efficiency_effects/sd_efficiency_total), digits = 2)
+
+efficiency_se <- as.data.frame(round(sqrt(diag(vcov(efficiency_model))), digits = 2))
+efficiency_se <- efficiency_se[-c(1,3:4),]
+efficiency_p <- as.data.frame(round(efficiency_results$"Pr(>Chisq)", digits = 2))
+efficiency_p <- efficiency_p[-1,]
+
+combined_efficiency <- data.frame(Sleep_Outcome = c("Efficiency (%)", ""),
+                               Group = c("Intervention", "Control"),
+                               Baseline = paste0(combined_baseline_mean_efficiency, " (", combined_baseline_sd_efficiency, ")"),
+                               Second_Trimester = paste0(combined_trim2_mean_efficiency, " (", combined_trim2_sd_efficiency, ")"),
+                               Third_Trimester = paste0(combined_trim3_mean_efficiency, " (", combined_trim3_sd_efficiency, ")"),
+                               Estimate = c("", paste0(efficiency_effects, " (", efficiency_se, ")")),
+                               p = c("", efficiency_p),
+                               Cohens_d = c("", efficiency_cohens_d)
+)
+
+#Daytime dysfunction 
+baseline_daytime_dysfunction_ctrl <- mean(df_control1$daytime_dysfunction_scored)
+trim2_daytime_dysfunction_ctrl <- mean(df_control2$daytime_dysfunction_scored)
+trim3_daytime_dysfunction_ctrl <- mean(df_control3$daytime_dysfunction_scored)
+baseline_sd_daytime_dysfunction_ctrl <- sd(df_control1$daytime_dysfunction_scored)
+trim2_sd_daytime_dysfunction_ctrl <- sd(df_control2$daytime_dysfunction_scored)
+trim3_sd_daytime_dysfunction_ctrl <- sd(df_control3$daytime_dysfunction_scored)
+
+baseline_daytime_dysfunction_int <- mean(df_intervention1$daytime_dysfunction_scored, na.rm = TRUE)
+trim2_daytime_dysfunction_int <- mean(df_intervention2$daytime_dysfunction_scored, na.rm = TRUE)
+trim3_daytime_dysfunction_int <- mean(df_intervention3$daytime_dysfunction_scored, na.rm = TRUE)
+baseline_sd_daytime_dysfunction_int <- sd(df_intervention1$daytime_dysfunction_scored, na.rm = TRUE)
+trim2_sd_daytime_dysfunction_int <- sd(df_intervention2$daytime_dysfunction_scored, na.rm = TRUE)
+trim3_sd_daytime_dysfunction_int <- sd(df_intervention3$daytime_dysfunction_scored, na.rm = TRUE)
+
+combined_baseline_mean_daytime_dysfunction <- round(rbind(baseline_daytime_dysfunction_int, baseline_daytime_dysfunction_ctrl), digits = 2)
+combined_baseline_sd_daytime_dysfunction <- round(rbind(baseline_sd_daytime_dysfunction_int, baseline_sd_daytime_dysfunction_ctrl), digits = 2)
+combined_trim2_mean_daytime_dysfunction <- round(rbind(trim2_daytime_dysfunction_int, trim2_daytime_dysfunction_ctrl), digits = 2)
+combined_trim2_sd_daytime_dysfunction <- round(rbind(trim2_sd_daytime_dysfunction_int, trim2_sd_daytime_dysfunction_ctrl), digits = 2)
+combined_trim3_mean_daytime_dysfunction <- round(rbind(trim3_daytime_dysfunction_int, trim3_daytime_dysfunction_ctrl), digits = 2)
+combined_trim3_sd_daytime_dysfunction <- round(rbind(trim3_sd_daytime_dysfunction_int, trim3_sd_daytime_dysfunction_ctrl), digits = 2)
+
+daytime_dysfunction_effects <- as.data.frame(round(fixef(daytime_dysfunction_model), digits = 2))
+daytime_dysfunction_effects <- daytime_dysfunction_effects[-c(1,3:4),]
+sd_daytime_dysfunction_total <- sd(df_scored$daytime_dysfunction_scored, na.rm = TRUE)
+daytime_dysfunction_cohens_d <- round(abs(daytime_dysfunction_effects/sd_daytime_dysfunction_total), digits = 2)
+
+daytime_dysfunction_se <- as.data.frame(round(sqrt(diag(vcov(daytime_dysfunction_model))), digits = 2))
+daytime_dysfunction_se <- daytime_dysfunction_se[-c(1,3:4),]
+daytime_dysfunction_p <- as.data.frame(round(daytime_dysfunction_results$"Pr(>Chisq)", digits = 2))
+daytime_dysfunction_p <- daytime_dysfunction_p[-1,]
+
+combined_daytime_dysfunction <- data.frame(Sleep_Outcome = c("daytime_dysfunction (points)", ""),
+                               Group = c("Intervention", "Control"),
+                               Baseline = paste0(combined_baseline_mean_daytime_dysfunction, " (", combined_baseline_sd_daytime_dysfunction, ")"),
+                               Second_Trimester = paste0(combined_trim2_mean_daytime_dysfunction, " (", combined_trim2_sd_daytime_dysfunction, ")"),
+                               Third_Trimester = paste0(combined_trim3_mean_daytime_dysfunction, " (", combined_trim3_sd_daytime_dysfunction, ")"),
+                               Estimate = c("", paste0(daytime_dysfunction_effects, " (", daytime_dysfunction_se, ")")),
+                               p = c("", daytime_dysfunction_p),
+                               Cohens_d = c("", daytime_dysfunction_cohens_d)
+)
 
