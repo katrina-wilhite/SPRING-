@@ -35,7 +35,7 @@ abstract_table$`Cohen's d`[abstract_table$`Cohen's d` == "0.1"] <- "0.10"
 
 ```{r}
 abstract_table %>% 
-  kbl(caption = "Table. Effects of SPRING Intervention on Sleep Outcomes Across Pregnancy") %>% 
+  kbl(caption = "Table 1. Effects of SPRING Intervention on Sleep Outcomes Across Pregnancy") %>% 
   kable_classic() %>% 
   footnote("Global PSQI Score points range 0-21; All other points range 0-3; 0 indicates no sleep difficulties and higher scores indicate increasingly severe sleep difficulties; Efficiency is percentage of total time in bed / sleep duration; Bold results are significant.") %>% 
   column_spec(7, bold = ifelse(abstract_table$p == "0.01", TRUE, FALSE))
